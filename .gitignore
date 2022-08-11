@@ -1,4 +1,6 @@
 .idea
+temp/
+tmpcl4a59j1/
 .DS_Store
 venv/
 data/*.csv
