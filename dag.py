@@ -11,7 +11,8 @@ COLUMNS = ['title', 'score', 'author', 'total_awards_received', 'date', 'full_li
 
 class LocalParquetIOManager(IOManager):
 
-    def _get_path(self, context):
+    @staticmethod
+    def _get_path(context):
         return os.path.join("temp/", context.run_id, context.step_key, context.name)
 
     def load_input(self, context) -> DataFrame:
@@ -37,7 +38,7 @@ def make_posts() -> DataFrame:
 
 
 @op
-def epoch_converter(df: DataFrame):
+def epoch_converter(df: DataFrame) -> DataFrame:
     return df.withColumn('date', f.from_unixtime('date', 'yyyy-MM-dd HH:mm:ss'))
 
 
@@ -50,12 +51,12 @@ def cast_columns(df: DataFrame) -> DataFrame:
 
 
 @op
-def drop_nulls(df: DataFrame):
+def drop_nulls(df: DataFrame) -> DataFrame:
     return df.na.drop(subset=['score', 'num_comments'])
 
 
 @op
-def most_comments(df: DataFrame):
+def most_comments(df: DataFrame) -> DataFrame:
     return df.orderBy(['score', 'num_comments'], ascending=[0, 1])
 
 
